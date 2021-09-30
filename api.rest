@@ -1,0 +1,20 @@
+POST http://localhost:5000/api/conversations HTTP/1.1
+content-type: application/json
+
+{
+  "senderId": 4,
+  "receiverId": 3
+}
+
+###
+GET http://localhost:5000/api/conversations/1 HTTP/1.1
+
+###
+POST http://localhost:5000/api/messages HTTP/1.1
+content-type: application/json
+
+{
+  "conversationId": "6155420298f2eca36d5295c6",
+  "sender": 3,
+  "text": "Hello world"
+}
