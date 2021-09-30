@@ -12,8 +12,6 @@ const io = new Server(server, {
   },
 });
 
-// require("./config/init-redis");
-
 const conversationsRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
 
@@ -75,12 +73,14 @@ io.on("connection", (socket) => {
   });
 });
 
+const PORT = process.env.PORT || 5000;
+
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    server.listen(5000, () => {
-      console.log("Server is running at: http://localhost:5000");
+    server.listen(PORT, () => {
+      console.log(`Server is running at: http://localhost:${PORT}`);
     });
   } catch (error) {
     console.log(error);
