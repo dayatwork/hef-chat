@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://hospital-engineering-expo.com"],
   },
 });
 
@@ -82,7 +82,7 @@ const start = async () => {
     await mongoose.connect(process.env.MONGO_URI);
 
     server.listen(PORT, () => {
-      console.log(`Server is running at: http://localhost:${PORT}`);
+      console.log(`Server running on port: ${PORT}`);
     });
   } catch (error) {
     console.log(error);
