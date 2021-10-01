@@ -55,14 +55,14 @@ io.on("connection", (socket) => {
   // Send and Get Message
   socket.on("sendMessage", ({ _id, senderId, receiverId, text, createdAt }) => {
     const receiver = getUser(receiverId);
-    // if (receiver) {
-    io.to(receiver.socketId).emit("getMessage", {
-      _id,
-      senderId,
-      text,
-      createdAt,
-    });
-    // }
+    if (receiver) {
+      io.to(receiver.socketId).emit("getMessage", {
+        _id,
+        senderId,
+        text,
+        createdAt,
+      });
+    }
   });
 
   // When disconnect
@@ -72,6 +72,8 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 });
+
+console.log({ users });
 
 const PORT = process.env.PORT || 5000;
 
