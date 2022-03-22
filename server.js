@@ -15,7 +15,8 @@ const io = new Server(server, {
 const uploadRoute = require("./routes/upload");
 const conversationsRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
-const sponsorRoute = require("./routes/sponsors");
+const sponsorsRoute = require("./routes/sponsors");
+const blogsRoute = require("./routes/blogs");
 
 app.use(express.json());
 app.use(cors());
@@ -30,7 +31,8 @@ app.get("/", (req, res) => {
 app.use("/api/upload", uploadRoute);
 app.use("/api/conversations", conversationsRoute);
 app.use("/api/messages", messagesRoute);
-app.use("/api/sponsors", sponsorRoute);
+app.use("/api/sponsors", sponsorsRoute);
+app.use("/api/blogs", blogsRoute);
 
 // ======= Socket IO =======
 let users = [];
