@@ -1,34 +1,14 @@
 const router = require("express").Router();
-const Message = require("../models/Message");
+
+const {
+  addMessage,
+  getMessagesByConversationId,
+} = require("../controllers/messages");
 
 // Add Message
-router.post("/", async (req, res) => {
-  const { conversationId, text, sender } = req.body;
-
-  const newMessage = new Message({
-    conversationId,
-    sender,
-    text,
-  });
-
-  try {
-    const savedMessage = await newMessage.save();
-    res.status(200).json(savedMessage);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+router.post("/", addMessage);
 
 // Get Message
-router.get("/:conversationId", async (req, res) => {
-  try {
-    const messages = await Message.find({
-      conversationId: req.params.conversationId,
-    });
-    res.status(200).json(messages);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+router.get("/:conversationId", getMessagesByConversationId);
 
 module.exports = router;

@@ -12,8 +12,10 @@ const io = new Server(server, {
   },
 });
 
+const uploadRoute = require("./routes/upload");
 const conversationsRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
+const sponsorRoute = require("./routes/sponsors");
 
 app.use(express.json());
 app.use(cors());
@@ -25,9 +27,12 @@ app.get("/", (req, res) => {
   });
 });
 
+app.use("/api/upload", uploadRoute);
 app.use("/api/conversations", conversationsRoute);
 app.use("/api/messages", messagesRoute);
+app.use("/api/sponsors", sponsorRoute);
 
+// ======= Socket IO =======
 let users = [];
 
 const addUser = (userId, socketId) => {
@@ -72,6 +77,7 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 });
+// ======= End Socket IO =======
 
 console.log({ users });
 
