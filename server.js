@@ -18,6 +18,7 @@ const conversationsRoute = require("./routes/conversations");
 const messagesRoute = require("./routes/messages");
 const sponsorsRoute = require("./routes/sponsors");
 const blogsRoute = require("./routes/blogs");
+const Message = require("./models/Message");
 
 app.use(express.json());
 app.use(cors());
@@ -79,9 +80,12 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.on("readMessage", ({ conversationId, receiverId }) => {
+  socket.on("readMessage", async ({ conversationId, receiverId }) => {
     const receiver = getUser(receiverId);
-
+    await Message.updateMany(
+      { conversationId: conversationId, sender: receiverId },
+      { $set: { read: true } }
+    );
     if (receiver) {
       io.to(receiver.socketId).emit("messageRead", {
         conversationId,

@@ -25,11 +25,16 @@ const addMessage = async (req, res) => {
 };
 
 const getMessagesByConversationId = async (req, res) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 50;
   try {
     const messages = await Message.find({
       conversationId: req.params.conversationId,
-    });
-    res.status(200).json(messages);
+    })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip((page - 1) * 5);
+    res.status(200).json(messages.reverse());
   } catch (error) {
     res.status(500).json(error);
   }
