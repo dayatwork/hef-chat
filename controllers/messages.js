@@ -33,7 +33,7 @@ const getMessagesByConversationId = async (req, res) => {
     })
       .sort({ createdAt: -1 })
       .limit(limit)
-      .skip((page - 1) * 5);
+      .skip((page - 1) * limit);
     res.status(200).json(messages.reverse());
   } catch (error) {
     res.status(500).json(error);
