@@ -4,6 +4,7 @@ const blogSchema = new mongoose.Schema(
   {
     title: {
       type: String,
+      unique: true,
     },
     subtitle: {
       type: String,
@@ -18,6 +19,9 @@ const blogSchema = new mongoose.Schema(
     },
     content: {
       type: String,
+    },
+    published: {
+      type: Boolean,
     },
   },
   {

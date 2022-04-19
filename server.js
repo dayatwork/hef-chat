@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const morgan = require("morgan");
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:3000", "https://hospital-engineering-expo.com"],
@@ -20,6 +21,7 @@ const blogsRoute = require("./routes/blogs");
 
 app.use(express.json());
 app.use(cors());
+app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
   console.log("body", req.body);
@@ -60,14 +62,29 @@ io.on("connection", (socket) => {
   });
 
   // Send and Get Message
-  socket.on("sendMessage", ({ _id, senderId, receiverId, text, createdAt }) => {
+  socket.on(
+    "sendMessage",
+    ({ _id, conversationId, senderId, receiverId, text, createdAt }) => {
+      const receiver = getUser(receiverId);
+
+      if (receiver) {
+        io.to(receiver.socketId).emit("getMessage", {
+          _id,
+          conversationId,
+          senderId,
+          text,
+          createdAt,
+        });
+      }
+    }
+  );
+
+  socket.on("readMessage", ({ conversationId, receiverId }) => {
     const receiver = getUser(receiverId);
+
     if (receiver) {
-      io.to(receiver.socketId).emit("getMessage", {
-        _id,
-        senderId,
-        text,
-        createdAt,
+      io.to(receiver.socketId).emit("messageRead", {
+        conversationId,
       });
     }
   });
